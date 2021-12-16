@@ -1,0 +1,13 @@
+parsetab.py
+parser.out
+entrada
+SymbolsTable/__pycache__
+Natives/__pycache__
+Instruction/__pycache__
+Expressions/__pycache__
+Abstract/__pycache__
+Front
+__pycache__
+arbol.png
+ast.dot
+entrada.jl

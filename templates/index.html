@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Julia OLC2</title>
+    <link rel="stylesheet" href="/static/main.css">
+    <!-- PERMITE UTILIZAR EL EDITOR ACE -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ace.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/lux/bootstrap.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Compiler Julia</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <!-- BOTON: Llama al metodo Analizar dentro del main.js -->
+                <a href="#" id="execute"><button class="btn btn-success" style="margin: 1px;">Execute</button></a>
+                <a href="/report" id="report"><button class="btn btn-success" style="margin: 1px;">Report</button></a>
+                <a href="/grafo" id="grafo"><button class="btn btn-success" style="margin: 1px;">Tree</button></a>
+                <a href="/table" id="table"><button class="btn btn-success" style="margin: 1px;">Table</button></a>
+            
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- CONSOLA DE ENTRADA -->
+   
+    <div style="float: left; width: 50% ;">
+        <!-- CONSOLA DE ENTRADA -->
+        <br>
+        <h3>Entrada:</h3>
+    </div>
+    <div style="float: right; width: 50%">
+        <!-- CONSOLA DE SALIDA -->
+        <br>
+        <h3> Console Julia:</h3>
+        
+        <!-- CONSOLA DE SALIDA -->
+   
+    </div>
+      
+    <div class="row">
+        <div id="code" style=" float :inline-start; margin: 10px; width: 640px; height: 467px;"></div>  
+
+        <div id="output"  style="float: inline-end ; margin: 10px; margin-block-start: 48px; width: 640px; height: 467px;"> </div>
+    </div>  
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="/static/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+    var codeEditor = ace.edit("code");
+    codeEditor.setTheme("ace/theme/cobalt");
+    codeEditor.session.setMode("ace/mode/julia");
+    codeEditor.setShowPrintMargin(false);
+    document.getElementById('code').style.fontSize='18px';
+
+    var output = ace.edit("output");
+    output.setTheme("ace/theme/twilight");
+    output.session.setMode("ace/mode/plain_text");
+    output.setReadOnly(true);
+    output.setShowPrintMargin(false);
+    output.renderer.setShowGutter(false);
+    document.getElementById('output').style.fontSize='18px';
+    
+</script>
+
+
+
+<script>
+    
+    $(function(){
+        $('a#execute').on('click', function(e) {
+            var code = codeEditor.getValue();
+            console.log(code);
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/execute',
+                data: JSON.stringify({ input: code }),
+                success: function(data){
+                    console.log(data);
+                    output.setValue(data.msg);
+                },
+                contentType: 'application/json',
+                dataType: 'json'
+            });
+        });
+        $('a#report').on('click', function(e) {
+            $.ajax({
+                url: '/report'
+            });
+        });
+
+        $('a#grafo').on('click', function(e) {
+            $.ajax({
+                url: '/grafo'
+            });
+        });
+
+        $('a#table').on('click', function(e) {
+            $.ajax({
+                url: '/table'
+            });
+        });
+   
+   
+   })
+</script>
+</body>
+</html>
